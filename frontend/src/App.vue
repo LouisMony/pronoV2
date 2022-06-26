@@ -1,6 +1,5 @@
 <template>
   <div id="app">
-
     <NavBar />
     <router-view/>
   </div>
@@ -19,8 +18,14 @@ export default {
 </script>
 
 <style>
-#app {
-  font-family: Avenir, Helvetica, Arial, sans-serif;
+
+@import url('https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700;900&display=swap');
+
+body {
+  font-family: 'Poppins', sans-serif;
   margin-top:60px;
+  background: #0F0F0F;
+  color: white;
+
 }
 </style>
