@@ -18,7 +18,14 @@ const routes = [
   {
     path: '/homevue',
     name: 'HomeVue',
-    component: HomeVue
+    component: HomeVue,
+    beforeEnter: (to, from, next) => {
+      if(window.localStorage.getItem('token') !== null){
+        next()
+      }else{
+        router.push('/login')
+      }
+    }
   },
   
   {

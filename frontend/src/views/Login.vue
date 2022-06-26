@@ -2,10 +2,10 @@
   <div>
   <form @submit.prevent="submitForm">
         <div class="form">
-            <h1>Login</h1>
+            <h1>Me connecter</h1>
             <input type="text" v-model="username" placeholder="Email" />
-            <input type="password" v-model="password" placeholder="mot de passe"/>
-            <button>Submit</button>
+            <input type="password" v-model="password" placeholder="Mot de passe"/>
+            <button>Suivant</button>
         </div>
     </form>
   </div>
@@ -47,3 +47,52 @@ export default {
     }
 }
 </script>
+
+<style lang="scss" scopped>
+.form{
+    width: fit-content;
+    margin: auto;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 20px;
+    background: #1B1D23;
+    padding: 50px 25px;
+    border-radius: 15px;
+
+    h1{
+        margin: 0;
+    }
+
+    input{
+        border: solid 1px rgba(255, 255, 255, 0.305);
+        width: 300px;
+        padding: 10px;
+        font-family: 'Poppins';
+        background: transparent;
+        border-radius: 5px;
+        color: white;
+
+        &:focus{
+            outline: none;
+        }
+    }
+
+    button{
+        font-family: 'Poppins';
+        font-weight: bold;
+        background: #154EFF;
+        border-radius: 5px;
+        width: 320px;
+        padding: 10px;
+        color: white;
+        border: none;
+        transition: all 200ms linear;
+        cursor: pointer;
+
+        &:hover{
+            background: #052fae;
+        }
+    }
+}
+</style>

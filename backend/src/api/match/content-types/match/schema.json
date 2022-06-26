@@ -4,7 +4,7 @@
   "info": {
     "singularName": "match",
     "pluralName": "matches",
-    "displayName": "Match"
+    "displayName": "match"
   },
   "options": {
     "draftAndPublish": true
@@ -12,8 +12,40 @@
   "pluginOptions": {},
   "attributes": {
     "match_id": {
-      "type": "uid",
-      "required": true
+      "type": "uid"
+    },
+    "score_a": {
+      "type": "integer",
+      "default": 0
+    },
+    "score_b": {
+      "type": "integer",
+      "default": 0
+    },
+    "drapeau_equipe_a": {
+      "allowedTypes": [
+        "images"
+      ],
+      "type": "media",
+      "multiple": false
+    },
+    "drapeau_equipe_b": {
+      "allowedTypes": [
+        "images"
+      ],
+      "type": "media",
+      "multiple": false
+    },
+    "match_bonus": {
+      "type": "boolean",
+      "default": false
+    },
+    "match_finis": {
+      "type": "boolean",
+      "default": false
+    },
+    "match_date": {
+      "type": "date"
     }
   }
 }

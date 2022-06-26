@@ -5,7 +5,7 @@
             <span>Equipe A - Equipe B</span>
             <div class="match">
                 <div class="drapeau"></div>
-                <span>1 - 0</span>
+                <span> {{score}}</span>
                 <div class="drapeau"></div>
             </div>
             <img src="../assets/img/terrain.png" alt="terrain">
@@ -27,8 +27,48 @@
 
 <script>
 
+import {http} from "../assets/js/http-common.js"
+
 export default {
-  name: 'HomeVue',
+    
+    name: 'HomeVue',
+
+    data(){
+        return{ 
+          score:'prout',   
+        }
+    },
+
+    mounted(){
+        console.log(this.score);
+        this.getActualMatch
+    },
+
+    methods:{
+        getActualMatch: function(){
+            http.get('matches?populate=*', {
+                headers: {
+                    Authorization:
+                    'Bearer '+localStorage.getItem('token')+'',
+                },
+            })
+            .then(function (res) {
+                var done = false
+                var last_match 
+                res.data.data.forEach(item => {
+                    if (item.attributes.match_finis === false && done === false){
+                        last_match = item
+                        done = true
+                    }
+                })
+
+            var score_A = last_match.attributes.score_a
+            var score_B = last_match.attributes.score_b
+            console.log(this.score)
+            this.score = "lalalal"
+            }) 
+        }
+    }
 }
 </script>
 
