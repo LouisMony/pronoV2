@@ -4,7 +4,8 @@
   "info": {
     "singularName": "match",
     "pluralName": "matches",
-    "displayName": "match"
+    "displayName": "match",
+    "description": ""
   },
   "options": {
     "draftAndPublish": true
@@ -23,18 +24,20 @@
       "default": 0
     },
     "drapeau_equipe_a": {
+      "type": "media",
+      "multiple": false,
+      "required": false,
       "allowedTypes": [
         "images"
-      ],
-      "type": "media",
-      "multiple": false
+      ]
     },
     "drapeau_equipe_b": {
+      "type": "media",
+      "multiple": false,
+      "required": false,
       "allowedTypes": [
         "images"
-      ],
-      "type": "media",
-      "multiple": false
+      ]
     },
     "match_bonus": {
       "type": "boolean",

@@ -19,6 +19,12 @@
             </div>
 
             <div class="prono">
+                <ul>
+                    <li v-for="item in current_pronos" :key="item.name">
+                        <span>{{ item.name }}</span>
+                        <span>{{ item.prono }}</span>
+                    </li>
+                </ul>
             </div>
         </section>
         <section class="home_right"></section>
@@ -35,18 +41,25 @@ export default {
 
     data(){
         return{ 
-          score:'prout',   
+          score:'score',
+          current_pronos: [] , 
+          match: '',
         }
     },
 
-    mounted(){
-        console.log(this.score);
-        this.getActualMatch
+    async mounted(){
+        await this.getActualMatch()
+        await this.getCurrentPronos()
+        await this.getCurrentCote()
     },
 
     methods:{
-        getActualMatch: function(){
-            http.get('matches?populate=*', {
+        async getActualMatch(){
+            
+            var score_final = ""
+            var current_match = ""
+
+            await http.get('matches?populate=*', {
                 headers: {
                     Authorization:
                     'Bearer '+localStorage.getItem('token')+'',
@@ -58,15 +71,64 @@ export default {
                 res.data.data.forEach(item => {
                     if (item.attributes.match_finis === false && done === false){
                         last_match = item
+                        current_match = item.attributes.match_id
                         done = true
                     }
                 })
-
             var score_A = last_match.attributes.score_a
             var score_B = last_match.attributes.score_b
-            console.log(this.score)
-            this.score = "lalalal"
-            }) 
+            score_final = ""+score_A+" - "+score_B+"" 
+            })   
+
+            this.match = current_match
+            this.score = score_final          
+        },
+
+        async getCurrentPronos(){
+            var pronoArr = []
+            await http.get('pronos?filters[match_id][$eq]='+this.match+'', {
+                headers: {
+                    Authorization:
+                    'Bearer '+localStorage.getItem('token')+'',
+                },
+            })
+            .then(function (res) {
+                res.data.data.forEach( item => {
+                    var item_name = item.attributes.name;
+                    var item_score_a = item.attributes.score_a;
+                    var item_score_b = item.attributes.score_b;
+                    var item_prediction = item.attributes.prediction
+                    var score = ""+item_score_a+" - "+item_score_b+""
+
+                    if (item_prediction === "A"){
+                        const obj = {name: item_name, prono: score, prediction: 'A'};
+                        pronoArr.push(obj);
+                    }
+                    else if (item_prediction === "B"){
+                        const obj = {name: item_name, prono: score, prediction: 'B'};
+                        pronoArr.push(obj);
+                    }
+                    else if (item_prediction === "N"){
+                        const obj = {name: item_name, prono: score, prediction: 'N'};
+                        pronoArr.push(obj);
+                    }
+                    
+
+
+                })
+            })
+            this.current_pronos = pronoArr
+        },
+
+        getCurrentCote(){
+            var prono_lenght = 0
+            this.current_pronos.forEach(item => {
+                prono_lenght ++ 
+            })
+            console.log(prono_lenght);
+            
+            const cote_A = this.current_pronos.find(element => element.prediction === "A");
+            console.log(cote_A.prono_lenght)
         }
     }
 }
@@ -163,7 +225,25 @@ export default {
                 width: 84%;
                 border-radius: 10px;
                 background:  rgba(11, 11, 11, 0.21);
-                height: 37%;
+                height: 33%;
+                padding: 10px 20px 20px 20px;
+                overflow-y: scroll;
+                &::-webkit-scrollbar {display: none;}
+
+                ul{
+                    margin: 0;
+                    padding: 0;
+                    list-style-type: none;
+                    width: 100%;
+
+                    li{
+                        display: flex;
+                        justify-content: space-between;
+                        align-content: center;
+                        padding: 10px 0;
+                        border-bottom: 1px solid rgba(255, 255, 255, 0.339);
+                    }
+                }
             }
         }
     }

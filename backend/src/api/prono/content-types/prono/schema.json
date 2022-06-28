@@ -4,7 +4,8 @@
   "info": {
     "singularName": "prono",
     "pluralName": "pronos",
-    "displayName": "prono"
+    "displayName": "prono",
+    "description": ""
   },
   "options": {
     "draftAndPublish": true
@@ -21,6 +22,9 @@
       "type": "integer"
     },
     "name": {
+      "type": "string"
+    },
+    "prediction": {
       "type": "string"
     }
   }
