@@ -122,17 +122,24 @@ export default {
 
         getCurrentCote(){
             var prono_lenght = 0
+            var prediction_A = 0
+            var prediction_B = 0
+            var prediction_N = 0
             this.current_pronos.forEach(item => {
                 prono_lenght ++ 
+                if (item.prediction === "A") {prediction_A++}
+                if (item.prediction === "B") {prediction_B++}
+                if (item.prediction === "N") {prediction_N++}
             })
-            console.log(prono_lenght);
             
-            const cote_A = this.current_pronos.find(element => element.prediction === "A");
-            console.log(cote_A.prono_lenght)
+            var cote_A = 1 + (1 - ((prono_lenght - prediction_A)/prono_lenght))
+            var cote_B = 1 + (1 - ((prono_lenght - prediction_B)/prono_lenght))
+            var cote_N = 1 + (1 - ((prono_lenght - prediction_N)/prono_lenght))
+            
         }
     }
 }
-</script>
+</script> 
 
 <style lang="scss" scopped>
     .home{
