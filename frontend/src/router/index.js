@@ -4,6 +4,7 @@ import HomeView from '../views/HomeView.vue'
 import LoginView from '../views/Login.vue'
 import HomeVue from '../views/Home.vue'
 import AddbetView from '../views/AddBet.vue'
+import ProfilView from '../views/Profil.vue'
 
 Vue.use(VueRouter)
 
@@ -14,6 +15,19 @@ const routes = [
       name: 'LoginView'
     },
     component: HomeView
+  },
+
+  {
+    path: '/myprofil',
+    name: 'ProfilView',
+    component: ProfilView,
+    beforeEnter: (to, from, next) => {
+      if(window.localStorage.getItem('token') !== null){
+        next()
+      }else{
+        router.push('/login')
+      }
+    }
   },
 
   {

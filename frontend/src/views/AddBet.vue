@@ -4,7 +4,7 @@
         <div class="form">
             <h1>Ajouter un pronostic</h1>
             <select v-model="match_id">
-                <option v-for="match in matchs" :value="match">{{match}}</option>
+                <option v-for="match in matchs" :key="match" :value="match">{{match}}</option>
             </select>
             <input type="number" v-model="score_A" placeholder="Score Equipe A" />
             <input type="number" v-model="score_B" placeholder="Score Equipe B" />
