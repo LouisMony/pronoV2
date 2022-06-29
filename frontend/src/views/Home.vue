@@ -1,11 +1,11 @@
 <template>
   <div class="home">
         <section class="home_left">
-            <span>Match en cours</span>
-            <span>Equipe A - Equipe B</span>
+            <span>Match en cours :</span>
+            <span>{{match}}</span>
             <div class="match">
                 <div class="drapeau"></div>
-                <span> {{score}}</span>
+                <span>{{score}}</span>
                 <div class="drapeau"></div>
             </div>
             <img src="../assets/img/terrain.png" alt="terrain">

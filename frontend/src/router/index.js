@@ -3,6 +3,7 @@ import VueRouter from 'vue-router'
 import HomeView from '../views/HomeView.vue'
 import LoginView from '../views/Login.vue'
 import HomeVue from '../views/Home.vue'
+import AddbetView from '../views/AddBet.vue'
 
 Vue.use(VueRouter)
 
@@ -19,6 +20,19 @@ const routes = [
     path: '/homevue',
     name: 'HomeVue',
     component: HomeVue,
+    beforeEnter: (to, from, next) => {
+      if(window.localStorage.getItem('token') !== null){
+        next()
+      }else{
+        router.push('/login')
+      }
+    }
+  },
+
+  {
+    path: '/addBet',
+    name: 'AddbetView',
+    component: AddbetView,
     beforeEnter: (to, from, next) => {
       if(window.localStorage.getItem('token') !== null){
         next()
