@@ -13,11 +13,13 @@
                     </tr>
                 </thead>
                 <tbody>
-                    <!--<tr v-for="match in matchs" :key="match" :value="match">{{match}}</tr>-->
-                    <tr>
-                        <td>The table body</td>
-                        <td>The table body</td>
-                        <td>with two columns</td>
+                    <tr v-for="prono in prono_list" :key="prono">
+                        <td>{{prono.match_id}}</td>
+                        <td>{{prono.score_a}}</td>
+                        <td>{{prono.score_b}}</td>
+                        <td class="update">
+                            <svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" aria-hidden="true" role="img" class="iconify iconify--ic" width="32" height="32" preserveAspectRatio="xMidYMid meet" viewBox="0 0 24 24"><path fill="#ffffff" d="M3 17.25V21h3.75L17.81 9.94l-3.75-3.75zM20.71 5.63l-2.34-2.34a.996.996 0 0 0-1.41 0l-1.83 1.83l3.75 3.75l1.83-1.83a.996.996 0 0 0 0-1.41z"></path></svg>
+                        </td>
                     </tr>
                 </tbody>
             </table>
@@ -42,8 +44,8 @@ export default {
         }
     },
  
-    mounted(){
-        this.getProno()
+    async mounted(){
+        await this.getProno()
     },
     methods:{
         disconnect() {
@@ -68,6 +70,7 @@ export default {
                     userMatch.push({match_id: item_match_id, score_a : item_score_a, score_b: item_score_b})
                 })
             })
+            this.prono_list = userMatch
             console.log(userMatch);
         }
 
@@ -86,6 +89,43 @@ export default {
         border-radius: 20px;
         padding: 1px 20px 20px;
         margin-bottom: 20px;
+
+        table{
+            border-spacing : 0;
+            border-collapse : collapse;
+            margin-bottom: 20px;
+            text-align: left;
+            width: 100%;
+            tr{
+                height: 50px;
+                border-bottom: 1px solid rgb(92, 92, 92);
+            }
+
+            tbody{
+                color: rgb(188, 188, 188);
+
+                .update{
+                    text-align: right;
+                    
+                    svg{                        
+                        cursor: pointer;
+                        height: 20px;
+
+                        path{
+                            fill: rgb(188, 188, 188);
+                            transition: all 200ms linear;
+                        }
+                        
+
+                        &:hover{
+                            path{
+                                fill:#154EFF;
+                            }
+                        }
+                    }
+                }
+            }
+        }
 
         .button_addbet{
             background: #154EFF;
