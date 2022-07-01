@@ -9,6 +9,7 @@
                     <th>Match</th>
                     <th>Score A</th>
                     <th>Score B</th>
+                    <th>Cotes (A - B - N)</th>
                     <th>Bonus</th>
                     <th>Date</th>
                 </tr>
@@ -18,6 +19,7 @@
                     <td>{{match.match_id}}</td>
                     <td>{{match.score_a}}</td>
                     <td>{{match.score_b}}</td>
+                    <td>{{match.cote_a}} - {{match.cote_b}} - {{match.cote_nul}}</td>
                     <td> 
                         <span v-if="match.bonus === true"> OUI </span>
                         <span v-else> NON</span>
@@ -56,7 +58,6 @@ export default {
                 },
             })
             .then(function (res) {
-                const today = new Date();
 
                 res.data.data.forEach( item => {
                     var item_match_id = item.attributes.match_id;
@@ -64,11 +65,14 @@ export default {
                     var item_score_b = item.attributes.score_b;
                     var item_bonus = item.attributes.match_bonus;
                     var item_date = item.attributes.match_date;
-                
+                    var item_cote_a = item.attributes.cote_a;
+                    var item_cote_b = item.attributes.cote_b;
+                    var item_cote_nul = item.attributes.cote_nul;
 
+
+            
                     if (new Date(item_date) <= new Date()){item_date = "Terminé"}
                     
-
                     matchArr.push(
                         {
                             match_id: item_match_id, 
@@ -76,6 +80,9 @@ export default {
                             score_b: item_score_b, 
                             bonus: item_bonus,
                             date: item_date,
+                            cote_a: item_cote_a,
+                            cote_b: item_cote_b,
+                            cote_nul: item_cote_nul
                         }
                     )
                 })

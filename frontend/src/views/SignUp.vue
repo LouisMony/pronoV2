@@ -2,11 +2,12 @@
   <div>
   <form @submit.prevent="submitForm">
         <div class="form">
-            <h1>Me connecter</h1>
-            <input type="text" v-model="username" placeholder="Email" />
+            <h1>Créer mon compte</h1>
+            <input type="text" v-model="username" placeholder="Nom d'utilisateur" />
+            <input type="text" v-model="email" placeholder="Adresse e-mail" />
             <input type="password" v-model="password" placeholder="Mot de passe"/>
-            <button>Suivant</button>
-            <router-link class="redirect" to="/signup">Je n'ai pas encore de compte</router-link>
+            <button>Je m'inscris</button>
+            <router-link class="redirect" to="/login">J'ai déja un compte</router-link>
         </div>
     </form>
   </div>
@@ -17,11 +18,12 @@
 import {http} from "../assets/js/http-common.js"
 
 export default {
-  name: 'LoginView',
+  name: 'SignupView',
 
   data(){
       return{
           username: "",
+          email:"",
           password:"",
       }
   },
@@ -33,17 +35,19 @@ export default {
     },
     methods:{
         submitForm(){
-            http.post('auth/local', {
-                identifier: this.username,
+            http.post('auth/local/register', {
+                username: this.username,
+                email: this.email,
                 password: this.password
             }).then(res => {
                 console.log(res.data)
                 localStorage.setItem('token', res.data.jwt)
                 localStorage.setItem('username', res.data.user.username)
+
                 if(localStorage.getItem('username') !== null){
                     this.$router.replace('/homevue')
                 }
-                })
+            })
         }
     }
 }

@@ -17,7 +17,7 @@
                         <td>{{prono.match_id}}</td>
                         <td>{{prono.score_a}}</td>
                         <td>{{prono.score_b}}</td>
-                        <td class="update">
+                        <td v-if="new Date(prono.date) >= new Date()" class="update">
                             <svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" aria-hidden="true" role="img" class="iconify iconify--ic" width="32" height="32" preserveAspectRatio="xMidYMid meet" viewBox="0 0 24 24"><path fill="#ffffff" d="M3 17.25V21h3.75L17.81 9.94l-3.75-3.75zM20.71 5.63l-2.34-2.34a.996.996 0 0 0-1.41 0l-1.83 1.83l3.75 3.75l1.83-1.83a.996.996 0 0 0 0-1.41z"></path></svg>
                         </td>
                     </tr>
@@ -66,14 +66,25 @@ export default {
                     var item_match_id = item.attributes.match_id;
                     var item_score_a = item.attributes.score_a;
                     var item_score_b = item.attributes.score_b;
+            
+                    http.get('matches?filters[match_id][$eq]='+item_match_id+'', {
+                        headers: {
+                            Authorization:
+                            'Bearer '+localStorage.getItem('token')+'',
+                        },
+                    })
+                    .then(function (res) {   
+                        console.log(res.data.data);              
+                        var item_date = res.data.data[0].attributes.match_date;
+                        userMatch.push({match_id: item_match_id, score_a : item_score_a, score_b: item_score_b, date: item_date}) 
+                    })
+                    //if (new Date(item_date) <= new Date()){item_date = "Terminé"}
 
-                    userMatch.push({match_id: item_match_id, score_a : item_score_a, score_b: item_score_b})
                 })
             })
             this.prono_list = userMatch
             console.log(userMatch);
         }
-
 
     }
 }

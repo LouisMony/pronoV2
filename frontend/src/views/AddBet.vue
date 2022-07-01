@@ -73,9 +73,9 @@ export default {
         },
 
         submitBet(){
-            if(this.score_a > this.score_b){this.result = "A"}
-            if(this.score_a === this.score_b){this.result = "N"}
-            if(this.score_a < this.score_b){this.result = "B"}
+            if(this.score_A > this.score_B){this.result = "A"}
+            if(this.score_A === this.score_B){this.result = "N"}
+            if(this.score_A < this.score_B){this.result = "B"}
 
             http.post('pronos', 
             {
@@ -94,6 +94,7 @@ export default {
                 },
             }).then(res => {
                 console.log(res.data)
+                location.reload()
             })
         }
     }

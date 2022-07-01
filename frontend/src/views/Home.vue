@@ -4,7 +4,8 @@
             <span>Match en cours :</span>
             <span>{{match}}</span>
             <div class="match">
-                <div class="drapeau"></div>
+                <div class="drapeau">
+                </div>
                 <span>{{score}}</span>
                 <div class="drapeau"></div>
             </div>

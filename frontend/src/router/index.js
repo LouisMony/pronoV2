@@ -6,6 +6,7 @@ import HomeVue from '../views/Home.vue'
 import AddbetView from '../views/AddBet.vue'
 import ProfilView from '../views/Profil.vue'
 import MatchView from '../views/MatchList.vue'
+import SignupView from '../views/SignUp.vue'
 
 Vue.use(VueRouter)
 
@@ -87,6 +88,12 @@ const routes = [
     path: '/login',
     name: 'LoginView',
     component: LoginView
+  },
+
+  {
+    path: '/signup',
+    name: 'SignupView',
+    component: SignupView
   },
   {
     path: '/about',
