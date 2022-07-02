@@ -13,6 +13,12 @@
                 </tr>
             </thead>
             <tbody>
+                <tr v-for="rang in classement" :key="rang">
+                    <td>{{rang.username}}</td>
+                    <td>{{rang.total_score}}</td>
+                    <td>{{rang.total_seum}}</td>
+                    <td>{{rang.coef_seum}}</td>
+                </tr>
             </tbody>
         </table>
     </div>
@@ -45,11 +51,19 @@ export default {
                 },
             })
             .then(function (res) {
-                console.log(res.data.data);
-            })
-            this.classement = UsersArr;
+                console.log(res.data);
+                res.data.forEach(item => {
+                    UsersArr.push({
+                        username: item.username, 
+                        total_score: item.total_score, 
+                        total_seum: item.total_seum, 
+                        coef_seum: item.coef_seum
+                    })
+                });
+            }).then(function(){
+                this.classement = UsersArr;
+            })    
         }
-
     }
         
 }

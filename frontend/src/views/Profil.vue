@@ -73,8 +73,7 @@ export default {
                             'Bearer '+localStorage.getItem('token')+'',
                         },
                     })
-                    .then(function (res) {   
-                        console.log(res.data.data);              
+                    .then(function (res) {               
                         var item_date = res.data.data[0].attributes.match_date;
                         userMatch.push({match_id: item_match_id, score_a : item_score_a, score_b: item_score_b, date: item_date}) 
                     })

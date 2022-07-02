@@ -82,7 +82,6 @@ export default {
                         last_match = item
                         current_match = item.attributes.match_id
                         done = true
-                        console.log(item);
                     }
                 })
             var score_A = last_match.attributes.score_a
@@ -135,9 +134,6 @@ export default {
                         const obj = {name: item_name, prono: score, prediction: 'N'};
                         pronoArr.push(obj);
                     }
-                    
-
-
                 })
             })
             this.current_pronos = pronoArr

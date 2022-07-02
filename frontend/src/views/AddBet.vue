@@ -33,7 +33,6 @@ export default {
  
     async mounted(){
         await this.GenerateMatchList();
-        console.log(this.matchs)
     },
 
     methods:{

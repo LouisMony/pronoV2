@@ -19,9 +19,9 @@ export default {
     NavBar
   },
 
-  mounted(){
-    this.CalculCote()
-    //setInterval(this.CalculCote(), 5000);
+  async mounted(){
+    await this.CalculCote()
+    await this.CalculScore()
   }, 
 
   methods: {
@@ -90,6 +90,39 @@ export default {
             })
         },
 
+        async CalculScore(){
+            await http.get('matches', {
+                headers: {
+                    Authorization:
+                    'Bearer '+localStorage.getItem('token')+'',
+                },
+            }).then(function(res){
+                res.data.data.forEach(item => {
+                  //IF PAS TERMINE
+                   var match_id = item.attributes.match_id
+                   var score_a = item.attributes.score_a
+                   var score_b = item.attributes.score_b
+                   var cote_a = item.attributes.match_id
+                   var cote_nul = item.attributes.match_id
+                   var cote_b = item.attributes.match_id
+
+                   http.get('pronos?filters[match_id][$eq]='+match_id+'',{
+                      headers: {
+                          Authorization:
+                          'Bearer '+localStorage.getItem('token')+'',
+                      },
+                   }).then(function(res){
+                        console.log(res.data.data);
+                        res.data.data.forEach(item => {
+                          console.log(item);
+                        })
+
+                   })
+
+
+                })
+            })
+        }
     }
 }
 </script>
