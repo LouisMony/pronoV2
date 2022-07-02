@@ -69,8 +69,6 @@ export default {
                     var item_cote_b = item.attributes.cote_b;
                     var item_cote_nul = item.attributes.cote_nul;
 
-
-            
                     if (new Date(item_date) <= new Date()){item_date = "Terminé"}
                     
                     matchArr.push(
@@ -80,16 +78,15 @@ export default {
                             score_b: item_score_b, 
                             bonus: item_bonus,
                             date: item_date,
-                            cote_a: item_cote_a,
-                            cote_b: item_cote_b,
-                            cote_nul: item_cote_nul
+                            cote_a: Math.round(item_cote_a * 100) / 100,
+                            cote_b: Math.round(item_cote_b * 100) / 100,
+                            cote_nul: Math.round(item_cote_nul * 100) / 100,
                         }
                     )
                 })
             })
-            console.log(matchArr);
             this.all_matchs = matchArr;
-        },
+        }
     }
 }
 </script>
@@ -131,7 +128,6 @@ export default {
                         fill: rgb(188, 188, 188);
                         transition: all 200ms linear;
                     }
-                    
 
                     &:hover{
                         path{

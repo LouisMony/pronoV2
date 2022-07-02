@@ -26,6 +26,10 @@
     },
     "prediction": {
       "type": "string"
+    },
+    "comptabilise": {
+      "type": "boolean",
+      "default": false
     }
   }
 }

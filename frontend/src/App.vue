@@ -20,12 +20,13 @@ export default {
   },
 
   mounted(){
-    console.log('strat')
     this.CalculCote()
+    //setInterval(this.CalculCote(), 5000);
   }, 
 
   methods: {
       async CalculCote(){
+          console.log('start')
             await http.get('matches', {
                 headers: {
                     Authorization:
@@ -34,31 +35,58 @@ export default {
             })
             .then(function (res) {
                 res.data.data.forEach(item => {   
-                    var prediction_A = 0
-                    var prediction_B = 0
-                    var prediction_N = 0
+                    if (new Date(item.attributes.match_date) >= new Date()){
+                      var cote_A = 0 
+                      var cote_B = 0
+                      var cote_N = 0 
 
-                    http.get('pronos?filters[match_id][$eq]='+item.attributes.match_id+'', {
+                      var prediction_A = 0
+                      var prediction_B = 0
+                      var prediction_N = 0
+
+                      var currentMatch = item.attributes.match_id
+                      var currentID = item.id
+                      http.get('pronos?filters[match_id][$eq]='+currentMatch+'', {
                         headers: {
                             Authorization:
                             'Bearer '+localStorage.getItem('token')+'',
                         },
-                    })
-                    .then(function (res) {
-                        res.data.data.forEach( item => {
-                            var item_prediction = item.attributes.prediction;
-                            if (item_prediction === "A"){prediction_A++}
-                            if (item_prediction === "B"){prediction_B++}
-                            if (item_prediction === "N"){prediction_N++}
-                            console.log(item_prediction);
-                        })
-                    })
-                    .then(function(){
-                      console.log(prediction_A, prediction_B, prediction_N);
-                    })
-                })
-                
-                
+                      })
+                      .then(function (res) {
+                          res.data.data.forEach( item => {
+                              var item_prediction = item.attributes.prediction;
+                              if (item_prediction === "A"){prediction_A++}
+                              if (item_prediction === "B"){prediction_B++}
+                              if (item_prediction === "N"){prediction_N++}
+                          })
+                      }) 
+
+                      .then(function(){
+                          var prono_lenght = prediction_A + prediction_B + prediction_N
+                          
+                          cote_A = 1 + (1 - (prediction_A / prono_lenght))
+                          cote_B = 1 + (1 - (prediction_B / prono_lenght))
+                          cote_N = 1 + (1 - (prediction_N / prono_lenght))
+                      })
+                      .then(function(){
+                          http.put('matches/'+currentID+'', 
+                          {
+                            "data": {
+                              "cote_a": cote_A,
+                              "cote_b": cote_B,
+                              "cote_nul": cote_N,
+                            }
+                          },
+                          {
+                          headers: {
+                              Authorization:
+                              'Bearer '+localStorage.getItem('token')+'',
+                          },  
+
+                          })
+                      })
+                    }
+                })  
             })
         },
 

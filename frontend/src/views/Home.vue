@@ -4,19 +4,18 @@
             <span>Match en cours :</span>
             <span>{{match}}</span>
             <div class="match">
-                <div class="drapeau">
-                </div>
+                <div class="drapeau" v-bind:style="{ backgroundImage: 'url(' + drapeau_A + ')' }"> </div>
                 <span>{{score}}</span>
-                <div class="drapeau"></div>
+                <div class="drapeau" v-bind:style="{ backgroundImage: 'url(' + drapeau_B + ')' }"> </div>
             </div>
             <img src="../assets/img/terrain.png" alt="terrain">
 
             <span>Cote du match</span>
 
             <div class="cote">
-                <div class="cote_A">1.5</div>
-                <div class="cote_N">1.5</div>
-                <div class="cote_B">1.5</div>
+                <div class="cote_A">{{cote_A}}</div>
+                <div class="cote_N">{{cote_Nul}}</div>
+                <div class="cote_B">{{cote_B}}</div>
             </div>
 
             <div class="prono">
@@ -45,13 +44,17 @@ export default {
           score:'score',
           current_pronos: [] , 
           match: '',
+          cote_A: 0,
+          cote_B: 0,
+          cote_Nul: 0,
+          drapeau_A: "",
+          drapeau_B: ""
         }
     },
 
     async mounted(){
         await this.getActualMatch()
         await this.getCurrentPronos()
-        await this.getCurrentCote()
     },
 
     methods:{
@@ -59,6 +62,11 @@ export default {
             
             var score_final = ""
             var current_match = ""
+            var cote_a = 0
+            var cote_b = 0
+            var cote_nul = 0
+            var drap_A = ""
+            var drap_B = ""
 
             await http.get('matches?populate=*', {
                 headers: {
@@ -74,15 +82,28 @@ export default {
                         last_match = item
                         current_match = item.attributes.match_id
                         done = true
+                        console.log(item);
                     }
                 })
             var score_A = last_match.attributes.score_a
             var score_B = last_match.attributes.score_b
             score_final = ""+score_A+" - "+score_B+"" 
+            cote_a = last_match.attributes.cote_a
+            cote_b = last_match.attributes.cote_b
+            cote_nul = last_match.attributes.cote_nul
+            drap_A = "http://localhost:1337"+last_match.attributes.drapeau_equipe_a.data.attributes.formats.thumbnail.url
+            drap_B = "http://localhost:1337"+last_match.attributes.drapeau_equipe_b.data.attributes.formats.thumbnail.url
+
             })   
 
+            this.cote_A = Math.round(cote_a * 10) / 10
+            this.cote_B = Math.round(cote_b * 10) / 10
+            this.cote_Nul = Math.round(cote_nul * 10) / 10
+            this.drapeau_A = drap_A
+            this.drapeau_B = drap_B
             this.match = current_match
-            this.score = score_final          
+            this.score = score_final  
+
         },
 
         async getCurrentPronos(){
@@ -100,6 +121,7 @@ export default {
                     var item_score_b = item.attributes.score_b;
                     var item_prediction = item.attributes.prediction
                     var score = ""+item_score_a+" - "+item_score_b+""
+
 
                     if (item_prediction === "A"){
                         const obj = {name: item_name, prono: score, prediction: 'A'};
@@ -120,24 +142,6 @@ export default {
             })
             this.current_pronos = pronoArr
         },
-
-        getCurrentCote(){
-            var prono_lenght = 0
-            var prediction_A = 0
-            var prediction_B = 0
-            var prediction_N = 0
-            this.current_pronos.forEach(item => {
-                prono_lenght ++ 
-                if (item.prediction === "A") {prediction_A++}
-                if (item.prediction === "B") {prediction_B++}
-                if (item.prediction === "N") {prediction_N++}
-            })
-            
-            var cote_A = 1 + (1 - ((prono_lenght - prediction_A)/prono_lenght))
-            var cote_B = 1 + (1 - ((prono_lenght - prediction_B)/prono_lenght))
-            var cote_N = 1 + (1 - ((prono_lenght - prediction_N)/prono_lenght))
-            
-        }
     }
 }
 </script> 
@@ -199,6 +203,9 @@ export default {
                     aspect-ratio: 1/1;
                     border-radius: 50%;
                     border: solid 3px white;
+                    background-position: center;
+                    background-repeat: no-repeat;
+                    background-size: cover;
                 }
             }
 

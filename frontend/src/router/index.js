@@ -6,6 +6,7 @@ import HomeVue from '../views/Home.vue'
 import AddbetView from '../views/AddBet.vue'
 import ProfilView from '../views/Profil.vue'
 import MatchView from '../views/MatchList.vue'
+import ClassementView from '../views/Classement.vue'
 import SignupView from '../views/SignUp.vue'
 
 Vue.use(VueRouter)
@@ -49,6 +50,19 @@ const routes = [
     path: '/match',
     name: 'MatchView',
     component: MatchView,
+    beforeEnter: (to, from, next) => {
+      if(window.localStorage.getItem('token') !== null){
+        next()
+      }else{
+        router.push('/login')
+      }
+    }
+  },
+
+  {
+    path: '/classement',
+    name: 'ClassementView',
+    component: ClassementView,
     beforeEnter: (to, from, next) => {
       if(window.localStorage.getItem('token') !== null){
         next()

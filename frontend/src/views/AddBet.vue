@@ -63,7 +63,7 @@ export default {
             .then(function (res) {
                 res.data.data.forEach( item => {
                     var item_match_id = item.attributes.match_id;
-                    if (!userMatch.includes(item_match_id)){
+                    if (!userMatch.includes(item_match_id) && new Date(item.attributes.match_date) >= new Date()){
                         remainingMatch.push(item_match_id)
                     }
                 })
