@@ -26,7 +26,6 @@ export default {
 
   methods: {
       async CalculCote(){
-          console.log('start')
             await http.get('matches', {
                 headers: {
                     Authorization:
@@ -97,7 +96,7 @@ export default {
                 },
             }).then(function(res){
                 res.data.data.forEach(item => {
-                  //IF PAS TERMINE
+
                    var match_id = item.attributes.match_id
                    var score_a = item.attributes.score_a
                    var score_b = item.attributes.score_b
@@ -113,36 +112,79 @@ export default {
                       },
                    }).then(function(res){
                         res.data.data.forEach(item => {
-                          //IF PAS ENCORE COMPTABILIS2
-                          var name = item.attributes.name
-                          var prono_a = item.attributes.score_a
-                          var prono_b = item.attributes.score_b
-                          var prediction = item.attributes.prediction 
+                          if(item.attributes.comptabilise === false){
+                              var prono_id = item.id
+                              var name = item.attributes.name
+                              var prono_a = item.attributes.score_a
+                              var prono_b = item.attributes.score_b
+                              var prediction = item.attributes.prediction 
 
-                          var current_cote = 1
-                          var points = 0
-                          if (prono_a === score_a && prono_b === score_b){
-                              points = 10
-                          }
-                          else if((prediction === "A" && score_a > score_b) || (prediction === "B" && score_a < score_b) || (prediction === "N" && score_a === score_b)){
-                              points = 3
+                              var current_cote = 1
+                              var points = 0
+                              if (prono_a === score_a && prono_b === score_b){
+                                  points = 10
+                              }
+                              else if((prediction === "A" && score_a > score_b) || (prediction === "B" && score_a < score_b) || (prediction === "N" && score_a === score_b)){
+                                  points = 3
+                              }else{
+                                points = 0
+                              }
+
+                              if(prediction === "A"){current_cote = cote_a}
+                              else if(prediction === "B"){current_cote = cote_b}
+                              else if(prediction === "N"){current_cote = cote_nul}
+                              
+                              points = points * current_cote
+                              if (bonus === true){points = points * 2}
+
+                              console.log(name, 'a parié', prono_a, ' - ', prono_b, 'et marque', points, "points pour le macth", match_id, 'car il y a eu', score_a, score_b);
+
+                              http.get('users?filters[username][$eq]='+name+'',{
+                                  headers: {
+                                      Authorization:
+                                      'Bearer '+localStorage.getItem('token')+'',
+                                  },
+                              }).then(function(res){
+                                res.data.forEach(async (item) =>{
+                                  var id = await item.id
+                                  var score = await item.total_score
+                                  var new_score = await Math.round((score + points) * 10) / 10
+
+                                  await console.log(id, score, new_score);
+
+                                  http.put('users/'+id+'',
+                                  {
+                                      "total_score": new_score,
+                                  },
+                                  {
+                                  headers: {
+                                      Authorization:
+                                      'Bearer '+localStorage.getItem('token')+'',
+                                  },
+                                  }).then(await function(res){
+                                    console.log(res);
+
+                                    http.put('pronos/'+prono_id+'',
+                                    {
+                                      "data": {
+                                        "comptabilise": true,
+                                      }
+                                    },
+                                    {
+                                    headers: {
+                                        Authorization:
+                                        'Bearer '+localStorage.getItem('token')+'',
+                                    },
+                                    }).then(function(res){
+                                    })
+                                  })
+                                })
+                              })
                           }else{
-                            points = 0
+                            
                           }
-
-                          if(prediction === "A"){current_cote = cote_a}
-                          else if(prediction === "B"){current_cote = cote_b}
-                          else if(prediction === "N"){current_cote = cote_nul}
-                          
-                          points = points * current_cote
-                          if (bonus === true){points = points * 2}
-
-                          console.log(name, 'a parié', prono_a, ' - ', prono_b, 'et marque', points, "points pour le macth", match_id, 'car il y a eu', score_a, score_b);
                         })
-
                    })
-
-
                 })
             })
         }, 
