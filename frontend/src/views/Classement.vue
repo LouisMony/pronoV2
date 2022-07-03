@@ -50,7 +50,7 @@ export default {
                     'Bearer '+localStorage.getItem('token')+'',
                 },
             })
-            .then(function (res) {
+            .then((res) => {
                 console.log(res.data);
                 res.data.forEach(item => {
                     UsersArr.push({
@@ -60,9 +60,9 @@ export default {
                         coef_seum: item.coef_seum
                     })
                 });
-            }).then(function(){
                 this.classement = UsersArr;
-            })    
+                console.log(this.classement);
+            })
         }
     }
         

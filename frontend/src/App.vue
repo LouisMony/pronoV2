@@ -96,7 +96,6 @@ export default {
                 },
             }).then(function(res){
                 res.data.data.forEach(item => {
-
                    var match_id = item.attributes.match_id
                    var score_a = item.attributes.score_a
                    var score_b = item.attributes.score_b
@@ -145,13 +144,12 @@ export default {
                                       'Bearer '+localStorage.getItem('token')+'',
                                   },
                               }).then(function(res){
-                                res.data.forEach(async (item) =>{
-                                  var id = await item.id
-                                  var score = await item.total_score
-                                  var new_score = await Math.round((score + points) * 10) / 10
-
-                                  await console.log(id, score, new_score);
-
+                                res.data.forEach(item =>{
+                                  var id = item.id
+                                  var score = item.total_score
+                                  console.log(score)
+                                  var new_score = Math.round((score + points) * 10) / 10
+                                  
                                   http.put('users/'+id+'',
                                   {
                                       "total_score": new_score,
@@ -161,7 +159,7 @@ export default {
                                       Authorization:
                                       'Bearer '+localStorage.getItem('token')+'',
                                   },
-                                  }).then(await function(res){
+                                  }).then(function(res){
                                     console.log(res);
 
                                     http.put('pronos/'+prono_id+'',
