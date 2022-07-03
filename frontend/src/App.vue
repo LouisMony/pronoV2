@@ -63,7 +63,6 @@ export default {
 
                       .then(function(){
                           var prono_lenght = prediction_A + prediction_B + prediction_N
-                          
                           cote_A = 1 + (1 - (prediction_A / prono_lenght))
                           cote_B = 1 + (1 - (prediction_B / prono_lenght))
                           cote_N = 1 + (1 - (prediction_N / prono_lenght))
@@ -102,9 +101,10 @@ export default {
                    var match_id = item.attributes.match_id
                    var score_a = item.attributes.score_a
                    var score_b = item.attributes.score_b
-                   var cote_a = item.attributes.match_id
-                   var cote_nul = item.attributes.match_id
-                   var cote_b = item.attributes.match_id
+                   var cote_a = item.attributes.cote_a
+                   var cote_nul = item.attributes.cote_b
+                   var cote_b = item.attributes.cote_nul
+                   var bonus = item.attributes.match_bonus
 
                    http.get('pronos?filters[match_id][$eq]='+match_id+'',{
                       headers: {
@@ -112,9 +112,32 @@ export default {
                           'Bearer '+localStorage.getItem('token')+'',
                       },
                    }).then(function(res){
-                        console.log(res.data.data);
                         res.data.data.forEach(item => {
-                          console.log(item);
+                          //IF PAS ENCORE COMPTABILIS2
+                          var name = item.attributes.name
+                          var prono_a = item.attributes.score_a
+                          var prono_b = item.attributes.score_b
+                          var prediction = item.attributes.prediction 
+
+                          var current_cote = 1
+                          var points = 0
+                          if (prono_a === score_a && prono_b === score_b){
+                              points = 10
+                          }
+                          else if((prediction === "A" && score_a > score_b) || (prediction === "B" && score_a < score_b) || (prediction === "N" && score_a === score_b)){
+                              points = 3
+                          }else{
+                            points = 0
+                          }
+
+                          if(prediction === "A"){current_cote = cote_a}
+                          else if(prediction === "B"){current_cote = cote_b}
+                          else if(prediction === "N"){current_cote = cote_nul}
+                          
+                          points = points * current_cote
+                          if (bonus === true){points = points * 2}
+
+                          console.log(name, 'a parié', prono_a, ' - ', prono_b, 'et marque', points, "points pour le macth", match_id, 'car il y a eu', score_a, score_b);
                         })
 
                    })
@@ -122,7 +145,9 @@ export default {
 
                 })
             })
-        }
+        }, 
+
+        
     }
 }
 </script>
