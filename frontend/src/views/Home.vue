@@ -27,7 +27,30 @@
                 </ul>
             </div>
         </section>
-        <section class="home_right"></section>
+        <section class="home_right">
+                <span> 🏆 Podium </span>
+                <div class="podium">
+                    <ul v-for="rang in classement" :key="rang">
+                        <li><span>{{rang.username}}</span> {{rang.total_score}}</li>
+                    </ul>
+                </div>
+                <span> 🏆 Podium Seum (par points)</span>
+                <div class="podium">
+                    <ul v-for="rang in classement" :key="rang">
+                        <li><span>{{rang.username}}</span> {{rang.total_seum}}</li>
+                    </ul>
+                </div>
+                <span> 🏆 Podium Seum (par coef)</span>
+                <div class="podium">
+                    <ul v-for="rang in classement" :key="rang">
+                        <li><span>{{rang.username}}</span> {{rang.coef_seum}}</li>
+                    </ul>
+                </div>
+
+               <router-link to='/classement'>
+                    <span class="button">Voir les classements</span>
+               </router-link>
+        </section>
   </div>
 </template>
 
@@ -41,20 +64,23 @@ export default {
 
     data(){
         return{ 
-          score:'score',
-          current_pronos: [] , 
-          match: '',
-          cote_A: 0,
-          cote_B: 0,
-          cote_Nul: 0,
-          drapeau_A: "",
-          drapeau_B: ""
+            score:'score',
+            current_pronos: [] , 
+            match: '',
+            cote_A: 0,
+            cote_B: 0,
+            cote_Nul: 0,
+            drapeau_A: "",
+            drapeau_B: "",
+
+            classement:[],
         }
     },
 
     async mounted(){
         await this.getActualMatch()
         await this.getCurrentPronos()
+        await this.getCurrentClassement()
     },
 
     methods:{
@@ -138,6 +164,37 @@ export default {
             })
             this.current_pronos = pronoArr
         },
+
+        async getCurrentClassement(){
+            var UsersArr = []
+            await http.get('users', {
+                headers: {
+                    Authorization:
+                    'Bearer '+localStorage.getItem('token')+'',
+                },
+            })
+            .then((res) => {
+                console.log(res.data);
+                res.data.forEach(item => {
+                    UsersArr.push({
+                        username: item.username, 
+                        total_score: item.total_score, 
+                        total_seum: item.total_seum, 
+                        coef_seum: item.coef_seum
+                    })
+                });
+
+                UsersArr.sort(function compare(a, b) {
+                    if (a.total_score < b.total_score)
+                        return 1;
+                    if (a.total_score > b.total_score )
+                        return -1;
+                    return 0;
+                });
+
+                this.classement = UsersArr;
+            })
+        }
     }
 }
 </script> 
@@ -254,6 +311,46 @@ export default {
                         padding: 10px 0;
                         border-bottom: 1px solid rgba(255, 255, 255, 0.339);
                     }
+                }
+            }
+        }
+        .home_right{
+            span{
+                font-weight: bold;
+            }
+            .podium{
+                padding: 20px 0;
+                margin: 20px 0 40px;
+                border-bottom: 1px solid rgb(73, 73, 73);;
+                ul{
+                    margin: 0;
+                    padding: 0;
+                    list-style-type: none;
+                    display: flex;
+                    gap: 20px;
+                    font-size: 20px;
+                    color: rgb(217, 217, 217);
+
+                    li{
+                        span{
+                            font-weight: bold;
+                        }
+                    }
+                }
+            }
+            .button{
+                color: white;
+                background-color: #154EFF;
+                padding: 10px;
+                border-radius: 3px;
+                cursor: pointer;
+                font-weight: normal;
+                font-size: 14px;
+                text-decoration: none;
+                transition: all 200ms linear;
+
+                &:hover{
+                    background: #052fae;
                 }
             }
         }
