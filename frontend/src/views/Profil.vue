@@ -1,7 +1,9 @@
 <template>
   <div>
     <div class="profil">
-        <h1>Bienvenu {{name}}</h1>  
+        <h1>Bienvenu {{name}}</h1>
+         {{photo}}
+
         <div class="my_pronos">
             <h2>Tes pronos</h2> 
             <table>
@@ -42,11 +44,13 @@ export default {
     data(){
         return{
             name: localStorage.getItem('username'),
+            photo: localStorage.getItem('photo'),
             prono_list: []
         }
     },
  
     async mounted(){
+        await this.getProfil()
         await this.getProno()
     },
     methods:{

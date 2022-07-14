@@ -74,6 +74,13 @@
     "coef_seum": {
       "type": "decimal",
       "default": 0
+    },
+    "photo": {
+      "allowedTypes": [
+        "images"
+      ],
+      "type": "media",
+      "multiple": false
     }
   }
 }
