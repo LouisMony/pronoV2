@@ -21,7 +21,7 @@ export default {
 
   async mounted(){
     await this.CalculCote()
-    await this.CalculScore()
+    //await this.CalculScore()
   }, 
 
   methods: {

@@ -4,6 +4,7 @@ import HomeView from '../views/HomeView.vue'
 import LoginView from '../views/Login.vue'
 import HomeVue from '../views/Home.vue'
 import AddbetView from '../views/AddBet.vue'
+import UpdateView from '../views/Update.vue'
 import ProfilView from '../views/Profil.vue'
 import MatchView from '../views/MatchList.vue'
 import ClassementView from '../views/Classement.vue'
@@ -76,6 +77,18 @@ const routes = [
     path: '/addBet',
     name: 'AddbetView',
     component: AddbetView,
+    beforeEnter: (to, from, next) => {
+      if(window.localStorage.getItem('token') !== null){
+        next()
+      }else{
+        router.push('/login')
+      }
+    }
+  },
+  {
+    path: '/updateBet/:id',
+    name: 'UpdateView',
+    component: UpdateView,
     beforeEnter: (to, from, next) => {
       if(window.localStorage.getItem('token') !== null){
         next()
