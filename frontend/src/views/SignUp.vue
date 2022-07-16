@@ -6,6 +6,8 @@
             <input type="text" v-model="username" placeholder="Nom d'utilisateur" />
             <input type="text" v-model="email" placeholder="Adresse e-mail" />
             <input type="password" v-model="password" placeholder="Mot de passe"/>
+            <input type="file" @change="handleFileUpload( $event )"/>
+
             <button>Je m'inscris</button>
             <router-link class="redirect" to="/login">J'ai déja un compte</router-link>
         </div>
@@ -25,6 +27,7 @@ export default {
           username: "",
           email:"",
           password:"",
+          file: ''
       }
   },
  
@@ -34,7 +37,23 @@ export default {
         }
     },
     methods:{
+        handleFileUpload(event){
+            console.log('chnage');
+            this.file = event.target.files[0];
+            console.log(this.file);
+        },
+
         submitForm(){
+            let formData = new FormData();
+            formData.append('file', this.file);
+
+            http.post('upload', formData).then(res => {
+                console.log('est bon');
+                console.log(res.data)
+            }).catch((error)=>{
+                console.log(error);
+            })
+
             http.post('auth/local/register', {
                 username: this.username,
                 email: this.email,
