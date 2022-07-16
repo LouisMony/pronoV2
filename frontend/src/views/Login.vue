@@ -39,6 +39,7 @@ export default {
             }).then(res => {
                 console.log(res.data)
                 localStorage.setItem('token', res.data.jwt)
+                localStorage.setItem('id', res.data.user.id)
                 localStorage.setItem('username', res.data.user.username)
                 if(localStorage.getItem('username') !== null){
                     this.$router.replace('/homevue')

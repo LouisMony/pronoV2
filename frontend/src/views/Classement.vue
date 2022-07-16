@@ -14,7 +14,7 @@
             </thead>
             <tbody>
                 <tr v-for="rang in classement" :key="rang">
-                    <td>{{rang.username}}</td>
+                    <td class="PP"><img :src="rang.photo" alt="pp">{{rang.username}}</td>
                     <td>{{rang.total_score}}</td>
                     <td>{{rang.total_seum}}</td>
                     <td>{{rang.coef_seum}}</td>
@@ -44,7 +44,7 @@ export default {
     methods:{
         async getUsers(){
             var UsersArr = []
-            await http.get('users', {
+            await http.get('users?populate=*', {
                 headers: {
                     Authorization:
                     'Bearer '+localStorage.getItem('token')+'',
@@ -57,7 +57,8 @@ export default {
                         username: item.username, 
                         total_score: item.total_score, 
                         total_seum: item.total_seum, 
-                        coef_seum: item.coef_seum
+                        coef_seum: item.coef_seum, 
+                        photo: "http://localhost:1337"+item.photo.formats.thumbnail.url
                     })
                 });
                 this.classement = UsersArr;
@@ -94,6 +95,17 @@ export default {
 
         tbody{
             color: rgb(188, 188, 188);
+
+            .PP{
+                display: flex;
+                align-items: center;
+                img{
+                    margin: 10px 20px 10px 0;
+                    width: 50px;
+                    aspect-ratio: 1/1;
+                    border-radius: 50%;
+                }
+            }
 
             .update{
                 text-align: right;

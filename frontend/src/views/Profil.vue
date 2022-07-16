@@ -1,9 +1,10 @@
 <template>
   <div>
     <div class="profil">
-        <h1>Bienvenu {{name}}</h1>
-         {{photo}}
-
+        <div class="profil_top">
+            <img class="pp" :src="photo" alt="pp">
+            <h1>Bienvenu {{name}}</h1>
+        </div>
         <div class="my_pronos">
             <h2>Tes pronos</h2> 
             <table>
@@ -44,8 +45,9 @@ export default {
     data(){
         return{
             name: localStorage.getItem('username'),
-            photo: localStorage.getItem('photo'),
+            photo: '',
             prono_list: []
+
         }
     },
  
@@ -57,6 +59,24 @@ export default {
         disconnect() {
             localStorage.clear();
             this.$router.replace('/login')
+        },
+
+        async getProfil(){
+            var photoprofil = ''
+            await http.get('users?filters[id][$eq]='+localStorage.getItem('id')+'&populate=*', {
+                headers: {
+                    Authorization:
+                    'Bearer '+localStorage.getItem('token')+'',
+                },
+            })
+            .then((res) => {
+                console.log(res.data);
+                res.data.forEach(item => {
+                    photoprofil = "http://localhost:1337"+item.photo.formats.thumbnail.url
+                });
+                this.photo = photoprofil;
+                console.log(this.photo);
+            })
         },
 
         async getProno(){
@@ -99,6 +119,19 @@ export default {
 
 .profil{
     margin-left: 10%;
+
+    .profil_top{
+        display: flex;
+        align-items: center;
+        margin-bottom: 30px;
+        gap: 20px;
+        .pp {
+            width: 75px;
+            aspect-ratio: 1/1;
+            border-radius: 50%;
+        }
+    }
+    
 
     .my_pronos{
         background: #1B1D23;
