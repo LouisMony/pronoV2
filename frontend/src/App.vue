@@ -136,7 +136,7 @@ export default {
                               points = points * current_cote
                               if (bonus === true){points = points * 2}
 
-                              console.log(name, 'a parié', prono_a, ' - ', prono_b, 'et marque', points, "points pour le macth", match_id, 'car il y a eu', score_a, score_b);
+                              console.log(name, 'a parié', prono_a, ' - ', prono_b, 'et marque', points, "points pour le macth", match_id, 'car il y a eu', score_a, score_b, 'la cote pour ce match est de ', current_cote);
 
                               http.get('users?filters[username][$eq]='+name+'',{
                                   headers: {
